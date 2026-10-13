@@ -371,7 +371,6 @@
     color: #ff4d4d;
     text-shadow: 0 0 12px rgba(200,0,0,.7), 0 0 30px rgba(139,0,0,.5);
   }
-  .title .id { font-size: 13px; letter-spacing: 3px; color: #a04040; }
 
   .tabs {
     display: flex; gap: 0; margin-top: 14px;
@@ -570,22 +569,192 @@
   }
   .item {
     display: grid;
-    grid-template-columns: 46px 1fr;
+    grid-template-columns: 46px 52px 1fr;
     align-items: center;
-    padding: 7px 12px;
+    padding: 8px 12px;
     border-bottom: 1px dotted rgba(139,0,0,.35);
     font-size: 13px;
     gap: 10px;
+    cursor: pointer;
+    transition: background .12s ease, transform .1s ease, box-shadow .12s ease;
   }
   .item:last-child { border-bottom: none; }
+  .item:hover {
+    background: rgba(80,0,0,.35);
+    box-shadow: inset 0 0 0 1px rgba(255,60,60,.35);
+  }
+  .item:active { transform: translate(1px, 1px); }
   .item .num {
     color: #ff6a6a;
     letter-spacing: 2px;
     font-weight: bold;
   }
+  .item .icon {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,60,60,.4);
+    background: rgba(30,0,0,.5);
+    box-shadow: inset 0 0 8px rgba(80,0,0,.6);
+  }
+  .item .icon svg { width: 32px; height: 32px; display: block; }
   .item .name {
     color: #e0a0a0;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
   }
+  .item .name::after {
+    content: "▸";
+    color: #ff4d4d;
+    opacity: .6;
+    font-size: 11px;
+  }
+  .item:hover .name::after { opacity: 1; }
+
+  /* ===== МОДАЛЬНОЕ ОКНО ПРЕДМЕТА ===== */
+  .item-modal {
+    position: fixed; inset: 0;
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.85);
+    backdrop-filter: blur(2px);
+    padding: 20px;
+  }
+  .item-modal.visible { display: flex; animation: modalFade .2s ease-out; }
+  @keyframes modalFade { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+  .item-modal-box {
+    position: relative;
+    width: min(560px, 92vw);
+    max-height: 88vh;
+    background: #0e0101;
+    border: 2px solid var(--blood);
+    box-shadow:
+      0 0 0 2px #000 inset,
+      0 0 40px rgba(180,0,0,.5),
+      0 0 80px rgba(139,0,0,.3);
+    padding: 26px 28px 24px 28px;
+    animation: modalOpen .25s ease-out;
+    overflow: auto;
+  }
+  @keyframes modalOpen {
+    0% { opacity: 0; transform: scale(.94) translateY(8px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .item-modal-box::before,
+  .item-modal-box::after {
+    content: "";
+    position: absolute;
+    width: 20px; height: 20px;
+    border: 1px solid #ff4d4d;
+    pointer-events: none;
+    filter: drop-shadow(0 0 4px rgba(255,60,60,.8));
+  }
+  .item-modal-box::before {
+    top: -1px; left: -1px;
+    border-right: none; border-bottom: none;
+  }
+  .item-modal-box::after {
+    bottom: -1px; right: -1px;
+    border-left: none; border-top: none;
+  }
+
+  .item-modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--blood-bright);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+  .item-modal-head .im-title {
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: #ff4d4d;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(200,0,0,.7);
+  }
+  .item-modal-head .im-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #a04040;
+  }
+
+  .item-modal-body {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .item-modal-icon {
+    width: 160px; height: 160px;
+    border: 1px solid var(--blood);
+    background: rgba(20,0,0,.55);
+    box-shadow:
+      inset 0 0 20px rgba(80,0,0,.6),
+      0 0 20px rgba(139,0,0,.35);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .item-modal-icon::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(180,0,0,.1) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+  }
+  .item-modal-icon svg {
+    width: 120px; height: 120px;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(255,60,60,.5));
+  }
+
+  .item-modal-text h3 {
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: #ff6a6a;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(255,60,60,.5);
+    text-transform: uppercase;
+  }
+  .item-modal-text p {
+    font-size: 13px;
+    line-height: 1.75;
+    color: #d09090;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .item-modal-text .im-note {
+    display: block;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dotted rgba(139,0,0,.5);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #a04040;
+    text-transform: uppercase;
+  }
+
+  .item-modal-close {
+    position: absolute;
+    top: 10px; right: 12px;
+    width: 26px; height: 26px;
+    background: #2a0505;
+    border: 1px solid #7a0000;
+    color: #ffb0b0;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .12s ease;
+    z-index: 2;
+  }
+  .item-modal-close:hover { background: #a00; color: #fff; }
 
   .grid {
     display: grid; grid-template-columns: 180px 1fr;
@@ -734,9 +903,11 @@
     .row { grid-template-columns: 130px 1fr; font-size: 13px; }
     .row.full { font-size: 13px; }
     .tab { padding: 6px 10px; font-size: 10px; letter-spacing: 1px; }
-    .item { grid-template-columns: 36px 1fr; }
+    .item { grid-template-columns: 36px 42px 1fr; padding: 6px 8px; }
     .case .case-stamp { font-size: 8px; padding: 2px 6px; }
     .coming-soon .cs-mark { font-size: 26px; letter-spacing: 6px; }
+    .item-modal-body { grid-template-columns: 1fr; }
+    .item-modal-icon { margin: 0 auto; }
   }
 </style>
 </head>
@@ -937,7 +1108,6 @@
 
       <div class="title">
         <span>ЛИЧНОЕ ДЕЛО // GEIR.513</span>
-        <span class="id">ID: GEIR.513.401</span>
       </div>
 
       <div class="tabs" id="tabs">
@@ -1024,12 +1194,103 @@
                   <span class="case-num">6 ЕДИНИЦ</span>
                 </div>
                 <div class="items">
-                  <div class="item"><span class="num">01</span><span class="name">Набор для работы с радиотехникой</span></div>
-                  <div class="item"><span class="num">02</span><span class="name">Набедренный подсумок</span></div>
-                  <div class="item"><span class="num">03</span><span class="name">Палетка теней</span></div>
-                  <div class="item"><span class="num">04</span><span class="name">Зажигалка с гравировкой морской волны</span></div>
-                  <div class="item"><span class="num">05</span><span class="name">Комбинированный обжим (пресс-клещи)</span></div>
-                  <div class="item"><span class="num">06</span><span class="name">Музыкальная кассета EL-YL</span></div>
+
+                  <div class="item" data-item="radio">
+                    <span class="num">01</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <rect x="2" y="4" width="12" height="9" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>
+                        <rect x="3" y="5" width="5" height="4" fill="#ff6a6a"/>
+                        <rect x="3" y="5" width="5" height="1" fill="#ffb0b0"/>
+                        <rect x="9" y="5" width="4" height="1" fill="#ffb0b0"/>
+                        <rect x="9" y="7" width="4" height="1" fill="#8b0000"/>
+                        <rect x="3" y="10" width="2" height="2" fill="#ff4d4d"/>
+                        <rect x="6" y="10" width="2" height="2" fill="#8b0000"/>
+                        <rect x="9" y="10" width="2" height="2" fill="#ff4d4d"/>
+                        <rect x="7" y="2" width="1" height="2" fill="#ff4d4d"/>
+                        <rect x="7" y="2" width="3" height="1" fill="#ff4d4d"/>
+                      </svg>
+                    </span>
+                    <span class="name">Набор для работы с радиотехникой</span>
+                  </div>
+
+                  <div class="item" data-item="pouch">
+                    <span class="num">02</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <rect x="3" y="5" width="10" height="9" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>
+                        <rect x="5" y="3" width="6" height="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>
+                        <rect x="3" y="7" width="10" height="1" fill="#8b0000"/>
+                        <rect x="6" y="9" width="4" height="3" fill="#ff4d4d"/>
+                        <rect x="7" y="10" width="2" height="1" fill="#2a0000"/>
+                      </svg>
+                    </span>
+                    <span class="name">Набедренный подсумок</span>
+                  </div>
+
+                  <div class="item" data-item="palette">
+                    <span class="num">03</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <rect x="2" y="4" width="12" height="8" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>
+                        <rect x="3" y="5" width="3" height="3" fill="#ff6a6a"/>
+                        <rect x="7" y="5" width="3" height="3" fill="#ffb0b0"/>
+                        <rect x="11" y="5" width="2" height="3" fill="#8b0000"/>
+                        <rect x="3" y="9" width="3" height="2" fill="#8b0000"/>
+                        <rect x="7" y="9" width="3" height="2" fill="#ff4d4d"/>
+                        <rect x="11" y="9" width="2" height="2" fill="#ff6a6a"/>
+                      </svg>
+                    </span>
+                    <span class="name">Палетка теней</span>
+                  </div>
+
+                  <div class="item" data-item="lighter">
+                    <span class="num">04</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <rect x="5" y="4" width="6" height="10" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>
+                        <rect x="5" y="4" width="6" height="2" fill="#2a0000"/>
+                        <rect x="6" y="6" width="4" height="1" fill="#ff4d4d"/>
+                        <rect x="6" y="8" width="4" height="1" fill="#ff4d4d"/>
+                        <rect x="6" y="10" width="4" height="1" fill="#ff4d4d"/>
+                        <rect x="6" y="2" width="4" height="1" fill="#ffb0b0"/>
+                        <rect x="7" y="0" width="2" height="2" fill="#ff6a6a"/>
+                      </svg>
+                    </span>
+                    <span class="name">Зажигалка с гравировкой морской волны</span>
+                  </div>
+
+                  <div class="item" data-item="crimper">
+                    <span class="num">05</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <path d="M2 4 L10 4 L10 6 L2 6 Z" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.5"/>
+                        <path d="M2 10 L10 10 L10 12 L2 12 Z" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.5"/>
+                        <rect x="4" y="6" width="2" height="4" fill="#8b0000"/>
+                        <rect x="8" y="6" width="2" height="4" fill="#8b0000"/>
+                        <rect x="10" y="7" width="4" height="2" fill="#ff4d4d"/>
+                        <rect x="13" y="6" width="2" height="4" fill="#ff6a6a"/>
+                      </svg>
+                    </span>
+                    <span class="name">Комбинированный обжим (пресс-клещи)</span>
+                  </div>
+
+                  <div class="item" data-item="cassette">
+                    <span class="num">06</span>
+                    <span class="icon">
+                      <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
+                        <rect x="2" y="3" width="12" height="10" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>
+                        <rect x="3" y="4" width="10" height="2" fill="#8b0000"/>
+                        <circle cx="5.5" cy="9.5" r="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>
+                        <circle cx="10.5" cy="9.5" r="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>
+                        <circle cx="5.5" cy="9.5" r="0.8" fill="#ff4d4d"/>
+                        <circle cx="10.5" cy="9.5" r="0.8" fill="#ff4d4d"/>
+                        <rect x="7" y="12" width="2" height="1" fill="#ff6a6a"/>
+                      </svg>
+                    </span>
+                    <span class="name">Кассета EL-LY</span>
+                  </div>
+
                 </div>
               </div>
 
@@ -1172,6 +1433,25 @@
   </div>
 </div>
 
+<!-- ================= МОДАЛКА ПРЕДМЕТА ================= -->
+<div class="item-modal" id="itemModal">
+  <div class="item-modal-box">
+    <button class="item-modal-close" id="itemModalClose" aria-label="Закрыть">✕</button>
+    <div class="item-modal-head">
+      <span class="im-title">ЛИЧНЫЙ ПРЕДМЕТ</span>
+      <span class="im-num" id="itemModalNum">— / 06</span>
+    </div>
+    <div class="item-modal-body">
+      <div class="item-modal-icon" id="itemModalIcon"></div>
+      <div class="item-modal-text">
+        <h3 id="itemModalName">—</h3>
+        <p id="itemModalDesc">—</p>
+        <span class="im-note" id="itemModalNote">ИНВ. № — / ГИПЕРИОН</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   "use strict";
@@ -1226,6 +1506,146 @@
     });
   });
 
+  /* ===== ЛИЧНЫЕ ПРЕДМЕТЫ ===== */
+  var ITEMS = {
+    radio: {
+      num: '01',
+      name: 'Набор для работы с радиотехникой',
+      desc: 'Компактный комплект инструментов и расходников для ремонта и настройки радиоаппаратуры. Включает отвёртки, пинцет, паяльник, набор кабелей и контактных зажимов. Использовался Уной на Хаймате и на ERES-427.',
+      note: 'ИНВ. № 513-01 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<rect x="2" y="4" width="12" height="9" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>' +
+        '<rect x="3" y="5" width="5" height="4" fill="#ff6a6a"/>' +
+        '<rect x="3" y="5" width="5" height="1" fill="#ffb0b0"/>' +
+        '<rect x="9" y="5" width="4" height="1" fill="#ffb0b0"/>' +
+        '<rect x="9" y="7" width="4" height="1" fill="#8b0000"/>' +
+        '<rect x="3" y="10" width="2" height="2" fill="#ff4d4d"/>' +
+        '<rect x="6" y="10" width="2" height="2" fill="#8b0000"/>' +
+        '<rect x="9" y="10" width="2" height="2" fill="#ff4d4d"/>' +
+        '<rect x="7" y="2" width="1" height="2" fill="#ff4d4d"/>' +
+        '<rect x="7" y="2" width="3" height="1" fill="#ff4d4d"/>' +
+        '</svg>'
+    },
+    pouch: {
+      num: '02',
+      name: 'Набедренный подсумок',
+      desc: 'Стандартный армейский подсумок для ношения на бедре. Внутри — отделения под инструмент, аптечку и личные мелочи. На клапане вышит номер «513», слегка потёрт.',
+      note: 'ИНВ. № 513-02 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<rect x="3" y="5" width="10" height="9" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>' +
+        '<rect x="5" y="3" width="6" height="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>' +
+        '<rect x="3" y="7" width="10" height="1" fill="#8b0000"/>' +
+        '<rect x="6" y="9" width="4" height="3" fill="#ff4d4d"/>' +
+        '<rect x="7" y="10" width="2" height="1" fill="#2a0000"/>' +
+        '</svg>'
+    },
+    palette: {
+      num: '03',
+      name: 'Палетка теней',
+      desc: 'Небольшая косметическая палетка с тёплыми оттенками. По словам товарищей, Уна использовала её редко — в основном перед выходами на поверхность, «чтобы не выделяться». Один из оттенков стёрт почти до дна.',
+      note: 'ИНВ. № 513-03 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<rect x="2" y="4" width="12" height="8" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>' +
+        '<rect x="3" y="5" width="3" height="3" fill="#ff6a6a"/>' +
+        '<rect x="7" y="5" width="3" height="3" fill="#ffb0b0"/>' +
+        '<rect x="11" y="5" width="2" height="3" fill="#8b0000"/>' +
+        '<rect x="3" y="9" width="3" height="2" fill="#8b0000"/>' +
+        '<rect x="7" y="9" width="3" height="2" fill="#ff4d4d"/>' +
+        '<rect x="11" y="9" width="2" height="2" fill="#ff6a6a"/>' +
+        '</svg>'
+    },
+    lighter: {
+      num: '04',
+      name: 'Зажигалка с гравировкой морской волны',
+      desc: 'Металлическая зажигалка с выгравированным узором морской волны. Следы длительного использования — потёртости, царапины. Возможно, подарок с Хаймата.',
+      note: 'ИНВ. № 513-04 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<rect x="5" y="4" width="6" height="10" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>' +
+        '<rect x="5" y="4" width="6" height="2" fill="#2a0000"/>' +
+        '<rect x="6" y="6" width="4" height="1" fill="#ff4d4d"/>' +
+        '<rect x="6" y="8" width="4" height="1" fill="#ff4d4d"/>' +
+        '<rect x="6" y="10" width="4" height="1" fill="#ff4d4d"/>' +
+        '<rect x="6" y="2" width="4" height="1" fill="#ffb0b0"/>' +
+        '<rect x="7" y="0" width="2" height="2" fill="#ff6a6a"/>' +
+        '</svg>'
+    },
+    crimper: {
+      num: '05',
+      name: 'Комбинированный обжим (пресс-клещи)',
+      desc: 'Профессиональный инструмент для обжима контактов и кабельных наконечников. Излюбленный инструмент Уны в работе с радиотехникой. На рукояти выцарапано «UNA».',
+      note: 'ИНВ. № 513-05 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<path d="M2 4 L10 4 L10 6 L2 6 Z" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.5"/>' +
+        '<path d="M2 10 L10 10 L10 12 L2 12 Z" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.5"/>' +
+        '<rect x="4" y="6" width="2" height="4" fill="#8b0000"/>' +
+        '<rect x="8" y="6" width="2" height="4" fill="#8b0000"/>' +
+        '<rect x="10" y="7" width="4" height="2" fill="#ff4d4d"/>' +
+        '<rect x="13" y="6" width="2" height="4" fill="#ff6a6a"/>' +
+        '</svg>'
+    },
+    cassette: {
+      num: '06',
+      name: 'Кассета EL-LY',
+      desc: 'Аудиокассета с рукописной наклейкой «EL-LY». На плёнке записаны несколько треков — по словам Уны, «для тихих вечеров». На корпусе — следы перемотки вручную.',
+      note: 'ИНВ. № 513-06 // ГИПЕРИОН',
+      svg: '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">' +
+        '<rect x="2" y="3" width="12" height="10" fill="#3a0000" stroke="#ff4d4d" stroke-width="0.6"/>' +
+        '<rect x="3" y="4" width="10" height="2" fill="#8b0000"/>' +
+        '<circle cx="5.5" cy="9.5" r="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>' +
+        '<circle cx="10.5" cy="9.5" r="2" fill="#2a0000" stroke="#ff4d4d" stroke-width="0.4"/>' +
+        '<circle cx="5.5" cy="9.5" r="0.8" fill="#ff4d4d"/>' +
+        '<circle cx="10.5" cy="9.5" r="0.8" fill="#ff4d4d"/>' +
+        '<rect x="7" y="12" width="2" height="1" fill="#ff6a6a"/>' +
+        '</svg>'
+    }
+  };
+
+  var modal = document.getElementById('itemModal');
+  var modalClose = document.getElementById('itemModalClose');
+  var modalNum = document.getElementById('itemModalNum');
+  var modalIcon = document.getElementById('itemModalIcon');
+  var modalName = document.getElementById('itemModalName');
+  var modalDesc = document.getElementById('itemModalDesc');
+  var modalNote = document.getElementById('itemModalNote');
+
+  function openItem(key) {
+    var it = ITEMS[key];
+    if (!it || !modal) return;
+    modalNum.textContent = it.num + ' / 06';
+    modalIcon.innerHTML = it.svg;
+    modalName.textContent = it.name;
+    modalDesc.textContent = it.desc;
+    modalNote.textContent = it.note;
+    modal.classList.add('visible');
+  }
+
+  function closeItem() {
+    if (modal) modal.classList.remove('visible');
+  }
+
+  document.querySelectorAll('.item').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var key = el.getAttribute('data-item');
+      openItem(key);
+    });
+  });
+
+  if (modalClose) modalClose.addEventListener('click', closeItem);
+  if (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeItem();
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (modal && modal.classList.contains('visible')) {
+        closeItem();
+        e.stopPropagation();
+      }
+    }
+  }, true);
+
   function tick() {
     var el = document.getElementById('clock');
     if (!el) return;
@@ -1249,6 +1669,7 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
+      if (modal && modal.classList.contains('visible')) return;
       document.body.style.transition = 'opacity .4s';
       document.body.style.opacity = '0';
       setTimeout(function () {
