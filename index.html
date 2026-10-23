@@ -1854,7 +1854,6 @@
     {
       id: 'geir963',
       name: 'GEIR.963',
-      date: '14.02',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' },
         { label: 'Семья', cls: 'rel-family' }
@@ -1867,12 +1866,11 @@
         'Эти циклы были самыми смешными и яркими за все время, что я могу вспомнить! \n' +
         'Ты лучшая старшая сестра из всех, что я могу вспомнить.\n' +
         'А твой подарок я буду носить с удовольствие. Даже в КЗ.\n' +
-        'Ведь Стервятник всегда должен быть при параде.'
+        'Ведь Ястреб всегда должен быть при параде.'
     },
     {
       id: 'habr023',
       name: 'HABR.023',
-      date: '21.02',
       statuses: [
         { label: 'Семья', cls: 'rel-family' }
       ],
@@ -1881,13 +1879,12 @@
         'Она большая и пушистая кошка! Даже когда обижается на Цеппи. \n' +
         'Очень любит когда ее гладят.Хоть и не хочет признать этого.\n' +
         'Но когда она ела с подноса торт было смешно.\n' +
-        'Мне так уютно рядом с ней и Цеппи. И... Они точно стоят друг друга.\n' +
+        'Мне так уютно рядом с ней и Цеппи. И... Они точно стоят друг дурга.\n' +
         'Почему-то в их комнате я бываю слишком часто. А Штрасс вроде бы и не против.'
     },
     {
       id: 'habr041',
       name: 'HABR.041',
-      date: '21.02',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' },
         { label: 'Непонятность', cls: 'rel-uncertain' }
@@ -1919,7 +1916,6 @@
     {
       id: 'lstr217',
       name: 'LSTR.217',
-      date: '03.03',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' }
       ],
@@ -1933,7 +1929,6 @@
     {
       id: 'eulr546',
       name: 'EULR.546',
-      date: '09.03',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' }
       ],
@@ -1944,7 +1939,6 @@
     {
       id: 'eulr322',
       name: 'EULR.322',
-      date: '09.03',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' }
       ],
@@ -1998,7 +1992,7 @@
     if (!rel || !personModal) return;
 
     personModalNum.textContent = ('0' + (idx + 1)).slice(-2) + ' / ' + ('0' + RELATIONS.length).slice(-2);
-    personModalName.textContent = rel.name + (rel.date ? ' // ' + rel.date : '');
+    personModalName.textContent = rel.name;
     personModalStatuses.innerHTML = rel.statuses.map(function (st) {
       return '<span class="rel-status ' + st.cls + '">' + st.label + '</span>';
     }).join('');
