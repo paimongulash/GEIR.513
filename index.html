@@ -323,9 +323,26 @@
   .album { border: 1px solid var(--blood); background: rgba(20,0,0,.45); padding: 14px; box-shadow: inset 0 0 20px rgba(80,0,0,.5); }
   .album-head { font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase; border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px; text-shadow: 0 0 8px rgba(255,60,60,.5); }
   .album-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .album-photo { position: relative; aspect-ratio: 4 / 3; border: 1px solid var(--blood); background: repeating-linear-gradient(45deg, #140000 0 6px, #0d0000 6px 12px); display: flex; align-items: center; justify-content: center; color: #5e0000; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; box-shadow: inset 0 0 20px rgba(0,0,0,.8); overflow: hidden; }
-  .album-photo::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(180,0,0,.1) 0 1px, transparent 1px 3px); pointer-events: none; }
-  .album-photo img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.25) hue-rotate(-8deg) saturate(.85) brightness(.92); }
+    .album-photo {
+    position: relative; aspect-ratio: 3 / 4; /* Изменено с 4/3 на 3/4 для вертикальных фото */
+    border: 1px solid var(--blood);
+    background: #0d0000;
+    display: flex; align-items: center; justify-content: center;
+    color: #5e0000; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    box-shadow: inset 0 0 20px rgba(0,0,0,.8); overflow: hidden;
+  }
+  .album-photo::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(180,0,0,.1) 0 1px, transparent 1px 3px);
+    pointer-events: none; z-index: 2; /* Добавлено, чтобы полосы были поверх картинки */
+  }
+  .album-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover; /* Оставляем cover, чтобы фото заполняло рамку без пустых полей */
+    object-position: center top; /* Фокусируемся на верхней части (лицах) */
+    filter: sepia(.25) hue-rotate(-8deg) saturate(.85) brightness(.92);
+    position: relative; z-index: 1;
+  }
 
   .secret-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
   .secret-block { border: 1px solid var(--blood); background: rgba(20,0,0,.45); padding: 14px 16px; box-shadow: inset 0 0 20px rgba(80,0,0,.5); }
