@@ -1110,6 +1110,59 @@
     .coming-soon .cs-mark { font-size: 26px; letter-spacing: 6px; }
     .item-modal-body { grid-template-columns: 1fr; }
     .item-modal-icon { margin: 0 auto; }
+      /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
+  (function () {
+    var SECRET_PASS = 'undin';
+    var lock = document.getElementById('secretLock');
+    var form = document.getElementById('secretForm');
+    var pass = document.getElementById('secretPass');
+    var err = document.getElementById('secretErr');
+    var content = document.getElementById('secretContent');
+    var vinyl = document.getElementById('vinyl');
+    var audio = document.getElementById('vinylAudio');
+    var hint = document.getElementById('vinylHint');
+
+    if (!lock || !form || !pass || !content) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var val = (pass.value || '').trim().toLowerCase();
+      if (val === SECRET_PASS) {
+        lock.style.display = 'none';
+        content.classList.add('unlocked');
+      } else {
+        err.classList.add('show');
+        pass.value = '';
+        pass.focus();
+        setTimeout(function () { err.classList.remove('show'); }, 1600);
+      }
+    });
+
+    function updateHint() {
+      if (!audio || !hint) return;
+      var playing = !audio.paused;
+      vinyl.classList.toggle('playing', playing);
+      hint.classList.toggle('playing', playing);
+      hint.textContent = playing
+        ? 'ВОСПРОИЗВЕДЕНИЕ · НАЖМИТЕ, ЧТОБЫ ОСТАНОВИТЬ'
+        : 'НАЖМИТЕ НА ПЛАСТИНКУ · ВОСПРОИЗВЕДЕНИЕ';
+    }
+
+    if (vinyl && audio) {
+      vinyl.addEventListener('click', function () {
+        if (audio.paused) {
+          var p = audio.play();
+          if (p && p.catch) p.catch(function () { /* файл не найден или заблокирован */ });
+        } else {
+          audio.pause();
+        }
+      });
+      audio.addEventListener('play', updateHint);
+      audio.addEventListener('pause', updateHint);
+      audio.addEventListener('ended', updateHint);
+      updateHint();
+    }
+  };
   }
 </style>
 </head>
@@ -1588,7 +1641,7 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА 4: СЕКРЕТНО -->
+           <!-- ВКЛАДКА 4: СЕКРЕТНО -->
       <div class="tab-content" id="tab-secret">
         <div class="data">
 
@@ -1599,10 +1652,56 @@
               <span class="case-num">ЛИСТ 06</span>
             </div>
 
-            <div class="coming-soon">
-              <div class="cs-mark">COMING SOON</div>
-              <div class="cs-line"></div>
-              <div class="cs-sub">ДАННЫЕ ЗАСЕКРЕЧЕНЫ · ДОСТУП ОГРАНИЧЕН</div>
+            <!-- ПАРОЛЬНЫЙ ШЛЮЗ -->
+            <div class="secret-lock" id="secretLock">
+              <div class="lock-mark">▮▮▮▮▮▮</div>
+              <div class="lock-sub">ДАННЫЕ ЗАСЕКРЕЧЕНЫ · ВВЕДИТЕ КОД ДОСТУПА</div>
+              <form id="secretForm" autocomplete="off">
+                <input type="password" id="secretPass" placeholder="••••••" aria-label="Пароль">
+                <button type="submit" class="ok-btn">ПОДТВЕРДИТЬ</button>
+              </form>
+              <div class="lock-err" id="secretErr">НЕВЕРНЫЙ КОД · ДОСТУП ОТКЛОНЁН</div>
+            </div>
+
+            <!-- РАССЕКРЕЧЕННЫЙ КОНТЕНТ -->
+            <div class="secret-content" id="secretContent">
+
+              <div class="secret-top">
+
+                <!-- ЛЕВО: ПЛАСТИНКА -->
+                <div class="vinyl-wrap">
+                  <div class="vinyl" id="vinyl" title="Нажмите, чтобы включить / остановить">
+                    <span class="spindle"></span>
+                  </div>
+                  <div class="vinyl-hint" id="vinylHint">НАЖМИТЕ НА ПЛАСТИНКУ · ВОСПРОИЗВЕДЕНИЕ</div>
+                  <audio id="vinylAudio" src="Вайбик.mp3" preload="auto" loop></audio>
+                </div>
+
+                <!-- ПРАВО: ФОТОАЛЬБОМ -->
+                <div class="album">
+                  <div class="album-head">ФОТОАЛЬБОМ // GEIR.513</div>
+                  <div class="album-grid">
+                    <div class="album-photo"><!-- <img src="photo1.png" alt=""> -->ФОТО 01</div>
+                    <div class="album-photo"><!-- <img src="photo2.png" alt=""> -->ФОТО 02</div>
+                    <div class="album-photo"><!-- <img src="photo3.png" alt=""> -->ФОТО 03</div>
+                    <div class="album-photo"><!-- <img src="photo4.png" alt=""> -->ФОТО 04</div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- НИЗ: ДВЕ СТРОКИ -->
+              <div class="secret-bottom">
+                <div class="secret-block">
+                  <div class="sb-head">Фетиши и наклонности</div>
+                  <div class="sb-body">— ПУСТО —</div>
+                </div>
+                <div class="secret-block">
+                  <div class="sb-head">Пометки наблюдателей</div>
+                  <div class="sb-body">— ПУСТО —</div>
+                </div>
+              </div>
+
             </div>
 
           </div>
@@ -1707,6 +1806,59 @@
       var content = document.getElementById('tab-' + target);
       if (content) content.classList.add('active');
     });
+      /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
+  (function () {
+    var SECRET_PASS = 'undin';
+    var lock = document.getElementById('secretLock');
+    var form = document.getElementById('secretForm');
+    var pass = document.getElementById('secretPass');
+    var err = document.getElementById('secretErr');
+    var content = document.getElementById('secretContent');
+    var vinyl = document.getElementById('vinyl');
+    var audio = document.getElementById('vinylAudio');
+    var hint = document.getElementById('vinylHint');
+
+    if (!lock || !form || !pass || !content) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var val = (pass.value || '').trim().toLowerCase();
+      if (val === SECRET_PASS) {
+        lock.style.display = 'none';
+        content.classList.add('unlocked');
+      } else {
+        err.classList.add('show');
+        pass.value = '';
+        pass.focus();
+        setTimeout(function () { err.classList.remove('show'); }, 1600);
+      }
+    });
+
+    function updateHint() {
+      if (!audio || !hint) return;
+      var playing = !audio.paused;
+      vinyl.classList.toggle('playing', playing);
+      hint.classList.toggle('playing', playing);
+      hint.textContent = playing
+        ? 'ВОСПРОИЗВЕДЕНИЕ · НАЖМИТЕ, ЧТОБЫ ОСТАНОВИТЬ'
+        : 'НАЖМИТЕ НА ПЛАСТИНКУ · ВОСПРОИЗВЕДЕНИЕ';
+    }
+
+    if (vinyl && audio) {
+      vinyl.addEventListener('click', function () {
+        if (audio.paused) {
+          var p = audio.play();
+          if (p && p.catch) p.catch(function () { /* файл не найден или заблокирован */ });
+        } else {
+          audio.pause();
+        }
+      });
+      audio.addEventListener('play', updateHint);
+      audio.addEventListener('pause', updateHint);
+      audio.addEventListener('ended', updateHint);
+      updateHint();
+    }
+  })();
   });
 
   /* ===== ЛИЧНЫЕ ПРЕДМЕТЫ ===== */
