@@ -769,8 +769,7 @@
     overflow: hidden; align-self: start;
     aspect-ratio: 3 / 4; max-height: 300px;
     box-shadow: 0 0 20px rgba(139,0,0,.4), inset 0 0 20px rgba(80,0,0,.5);
-  }
-  .portrait svg,
+      .portrait svg,
   .portrait img {
     width: 100%;
     height: 100%;
@@ -1096,6 +1095,126 @@
   .dossier-wrap { display: none; }
   .dossier-wrap.visible { display: block; }
 
+  /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
+  .secret-lock {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 18px; padding: 70px 20px; text-align: center;
+  }
+  .secret-lock .lock-mark {
+    font-size: 38px; letter-spacing: 8px; color: #ff4d4d;
+    text-shadow: 0 0 20px rgba(255,60,60,.8), 0 0 60px rgba(180,0,0,.5);
+    animation: csPulse 2s ease-in-out infinite;
+  }
+  .secret-lock .lock-sub {
+    font-size: 11px; letter-spacing: 4px; color: #a04040; text-transform: uppercase;
+  }
+  .secret-lock form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+  .secret-lock input[type="password"] {
+    background: #140000; border: 2px solid var(--blood); color: #ffb0b0;
+    font-family: inherit; font-size: 14px; letter-spacing: 3px;
+    padding: 8px 12px; min-width: 220px; outline: none;
+    box-shadow: inset 2px 2px 0 0 rgba(0,0,0,.6), 0 0 10px rgba(180,0,0,.3);
+    text-shadow: 0 0 6px rgba(255,60,60,.5);
+  }
+  .secret-lock input[type="password"]:focus {
+    box-shadow: inset 2px 2px 0 0 rgba(0,0,0,.6), 0 0 18px rgba(255,60,60,.7);
+    border-color: var(--blood-soft);
+  }
+  .secret-lock .lock-err {
+    min-height: 16px; font-size: 11px; letter-spacing: 2px;
+    color: #ff3b3b; text-transform: uppercase; opacity: 0; transition: opacity .2s ease;
+  }
+  .secret-lock .lock-err.show { opacity: 1; }
+
+  .secret-content { display: none; }
+  .secret-content.unlocked { display: block; }
+
+  .secret-top { display: grid; grid-template-columns: 320px 1fr; gap: 22px; align-items: start; }
+
+  .vinyl-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 14px; border: 1px solid var(--blood); background: rgba(20,0,0,.45);
+    box-shadow: inset 0 0 20px rgba(80,0,0,.5), 0 0 20px rgba(139,0,0,.3);
+  }
+  .vinyl {
+    position: relative; width: 260px; height: 260px; border-radius: 50%;
+    cursor: pointer;
+    background: repeating-radial-gradient(circle at 50% 50%, #140000 0 2px, #0a0000 2px 4px, #1c0000 4px 5px);
+    border: 3px solid #2a0000;
+    box-shadow: 0 0 0 2px #000, 0 0 26px rgba(180,0,0,.45), inset 0 0 30px rgba(0,0,0,.9);
+    animation: vinylSpin 2.2s linear infinite;
+    animation-play-state: paused;
+  }
+  .vinyl.playing { animation-play-state: running; }
+  .vinyl::before {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: conic-gradient(from 0deg,
+      rgba(255,60,60,.10) 0deg 20deg, transparent 20deg 60deg,
+      rgba(255,60,60,.06) 60deg 80deg, transparent 80deg 180deg,
+      rgba(255,60,60,.10) 180deg 200deg, transparent 200deg 240deg,
+      rgba(255,60,60,.06) 240deg 260deg, transparent 260deg 360deg);
+    pointer-events: none;
+  }
+  .vinyl::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 34%; height: 34%; transform: translate(-50%, -50%); border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #ff6a6a 0%, #8b0000 55%, #2a0000 100%);
+    box-shadow: 0 0 0 3px #1a0000, 0 0 18px rgba(255,60,60,.5);
+    pointer-events: none;
+  }
+  .vinyl .spindle {
+    position: absolute; top: 50%; left: 50%; width: 10px; height: 10px;
+    transform: translate(-50%, -50%); border-radius: 50%;
+    background: #0a0000; box-shadow: 0 0 0 2px #ff4d4d; z-index: 2; pointer-events: none;
+  }
+  @keyframes vinylSpin { to { transform: rotate(360deg); } }
+
+  .vinyl-hint {
+    font-size: 10px; letter-spacing: 3px; color: #a04040;
+    text-transform: uppercase; text-align: center;
+  }
+  .vinyl-hint.playing { color: #ff4d4d; text-shadow: var(--glow); }
+
+  .album {
+    border: 1px solid var(--blood); background: rgba(20,0,0,.45);
+    padding: 14px; box-shadow: inset 0 0 20px rgba(80,0,0,.5);
+  }
+  .album-head {
+    font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase;
+    border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(255,60,60,.5);
+  }
+  .album-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .album-photo {
+    position: relative; aspect-ratio: 4 / 3; border: 1px solid var(--blood);
+    background: repeating-linear-gradient(45deg, #140000 0 6px, #0d0000 6px 12px);
+    display: flex; align-items: center; justify-content: center;
+    color: #5e0000; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    box-shadow: inset 0 0 20px rgba(0,0,0,.8); overflow: hidden;
+  }
+  .album-photo::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(180,0,0,.1) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+  }
+  .album-photo img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: sepia(.25) hue-rotate(-8deg) saturate(.85) brightness(.92);
+  }
+
+  .secret-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
+  .secret-block {
+    border: 1px solid var(--blood); background: rgba(20,0,0,.45);
+    padding: 14px 16px; box-shadow: inset 0 0 20px rgba(80,0,0,.5);
+  }
+  .secret-block .sb-head {
+    font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase;
+    border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(255,60,60,.5);
+  }
+  .secret-block .sb-body { font-size: 13px; line-height: 1.7; color: #5e0000; letter-spacing: 1px; min-height: 40px; }
+
   @media (max-width: 820px) {
     .boot .boot-log { font-size: 10px; bottom: 16px; }
     .grid { grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow-y: auto; }
@@ -1110,59 +1229,9 @@
     .coming-soon .cs-mark { font-size: 26px; letter-spacing: 6px; }
     .item-modal-body { grid-template-columns: 1fr; }
     .item-modal-icon { margin: 0 auto; }
-      /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
-  (function () {
-    var SECRET_PASS = 'undin';
-    var lock = document.getElementById('secretLock');
-    var form = document.getElementById('secretForm');
-    var pass = document.getElementById('secretPass');
-    var err = document.getElementById('secretErr');
-    var content = document.getElementById('secretContent');
-    var vinyl = document.getElementById('vinyl');
-    var audio = document.getElementById('vinylAudio');
-    var hint = document.getElementById('vinylHint');
-
-    if (!lock || !form || !pass || !content) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var val = (pass.value || '').trim().toLowerCase();
-      if (val === SECRET_PASS) {
-        lock.style.display = 'none';
-        content.classList.add('unlocked');
-      } else {
-        err.classList.add('show');
-        pass.value = '';
-        pass.focus();
-        setTimeout(function () { err.classList.remove('show'); }, 1600);
-      }
-    });
-
-    function updateHint() {
-      if (!audio || !hint) return;
-      var playing = !audio.paused;
-      vinyl.classList.toggle('playing', playing);
-      hint.classList.toggle('playing', playing);
-      hint.textContent = playing
-        ? 'ВОСПРОИЗВЕДЕНИЕ · НАЖМИТЕ, ЧТОБЫ ОСТАНОВИТЬ'
-        : 'НАЖМИТЕ НА ПЛАСТИНКУ · ВОСПРОИЗВЕДЕНИЕ';
-    }
-
-    if (vinyl && audio) {
-      vinyl.addEventListener('click', function () {
-        if (audio.paused) {
-          var p = audio.play();
-          if (p && p.catch) p.catch(function () { /* файл не найден или заблокирован */ });
-        } else {
-          audio.pause();
-        }
-      });
-      audio.addEventListener('play', updateHint);
-      audio.addEventListener('pause', updateHint);
-      audio.addEventListener('ended', updateHint);
-      updateHint();
-    }
-  };
+    .secret-top { grid-template-columns: 1fr; }
+    .secret-bottom { grid-template-columns: 1fr; }
+    .vinyl { width: 200px; height: 200px; }
   }
 </style>
 </head>
@@ -1300,7 +1369,8 @@
         <path d="M180 90 Q210 110 240 90" fill="none"/>
         <path d="M180 115 Q210 135 240 115" fill="none"/>
         <path d="M180 140 Q210 160 240 140" fill="none"/>
-        <path d="M180 165 Q210 185 240 165" fill="none"/>
+        <path d="M180 165 Q210 185 240
+                  <path d="M180 165 Q210 185 240 165" fill="none"/>
       </g>
     </svg>
   </div>
@@ -1641,10 +1711,9 @@
         </div>
       </div>
 
-           <!-- ВКЛАДКА 4: СЕКРЕТНО -->
+      <!-- ВКЛАДКА 4: СЕКРЕТНО -->
       <div class="tab-content" id="tab-secret">
         <div class="data">
-
           <div class="case">
             <div class="case-stamp">УР. 01</div>
             <div class="case-head">
@@ -1665,10 +1734,7 @@
 
             <!-- РАССЕКРЕЧЕННЫЙ КОНТЕНТ -->
             <div class="secret-content" id="secretContent">
-
               <div class="secret-top">
-
-                <!-- ЛЕВО: ПЛАСТИНКА -->
                 <div class="vinyl-wrap">
                   <div class="vinyl" id="vinyl" title="Нажмите, чтобы включить / остановить">
                     <span class="spindle"></span>
@@ -1677,7 +1743,6 @@
                   <audio id="vinylAudio" src="Вайбик.mp3" preload="auto" loop></audio>
                 </div>
 
-                <!-- ПРАВО: ФОТОАЛЬБОМ -->
                 <div class="album">
                   <div class="album-head">ФОТОАЛЬБОМ // GEIR.513</div>
                   <div class="album-grid">
@@ -1687,10 +1752,8 @@
                     <div class="album-photo"><!-- <img src="photo4.png" alt=""> -->ФОТО 04</div>
                   </div>
                 </div>
-
               </div>
 
-              <!-- НИЗ: ДВЕ СТРОКИ -->
               <div class="secret-bottom">
                 <div class="secret-block">
                   <div class="sb-head">Фетиши и наклонности</div>
@@ -1701,11 +1764,9 @@
                   <div class="sb-body">— ПУСТО —</div>
                 </div>
               </div>
-
             </div>
 
           </div>
-
         </div>
       </div>
 
@@ -1758,6 +1819,7 @@
 (function () {
   "use strict";
 
+  /* ===== BOOT ===== */
   var bootBar = document.getElementById('bootBar');
   var bootProgress = 0;
   if (bootBar) {
@@ -1768,8 +1830,7 @@
     }, 240);
   }
 
-  var bootLogLines = document.querySelectorAll('.boot-log-line');
-  bootLogLines.forEach(function (line) {
+  document.querySelectorAll('.boot-log-line').forEach(function (line) {
     var d = parseInt(line.getAttribute('data-delay'), 10) || 0;
     line.style.setProperty('--d', d);
   });
@@ -1787,14 +1848,12 @@
 
   var btnDossier = document.getElementById('btnOpenDossier');
   if (btnDossier) btnDossier.addEventListener('click', openDossier);
-
   setTimeout(function () {
     var boot = document.getElementById('boot');
-    if (boot && !boot.classList.contains('done')) {
-      openDossier();
-    }
+    if (boot && !boot.classList.contains('done')) openDossier();
   }, 6500);
 
+  /* ===== TABS ===== */
   var tabs = document.querySelectorAll('.tab');
   var tabContents = document.querySelectorAll('.tab-content');
   tabs.forEach(function (tab) {
@@ -1806,7 +1865,9 @@
       var content = document.getElementById('tab-' + target);
       if (content) content.classList.add('active');
     });
-      /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
+  });
+
+  /* ===== СЕКРЕТНЫЙ РАЗДЕЛ ===== */
   (function () {
     var SECRET_PASS = 'undin';
     var lock = document.getElementById('secretLock');
@@ -1848,7 +1909,7 @@
       vinyl.addEventListener('click', function () {
         if (audio.paused) {
           var p = audio.play();
-          if (p && p.catch) p.catch(function () { /* файл не найден или заблокирован */ });
+          if (p && p.catch) p.catch(function () {});
         } else {
           audio.pause();
         }
@@ -1859,7 +1920,6 @@
       updateHint();
     }
   })();
-  });
 
   /* ===== ЛИЧНЫЕ ПРЕДМЕТЫ ===== */
   var ITEMS = {
@@ -2175,6 +2235,7 @@
 
   renderRelations();
 
+  /* ===== ЧАСЫ ===== */
   function tick() {
     var el = document.getElementById('clock');
     if (!el) return;
@@ -2184,6 +2245,7 @@
   }
   setInterval(tick, 1000); tick();
 
+  /* ===== ГЛИТЧ ===== */
   var glitch = document.getElementById('glitch');
   function scheduleGlitch() {
     var delay = 4000 + Math.random() * 9000;
@@ -2196,6 +2258,7 @@
   }
   scheduleGlitch();
 
+  /* ===== ESC / F5 ===== */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (modal && modal.classList.contains('visible')) return;
@@ -2214,3 +2277,4 @@
 </script>
 </body>
 </html>
+ 
