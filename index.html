@@ -1,3 +1,10 @@
+Судя по скриншоту, вы наложили блоки **поверх** фотографий в правой колонке, из-за чего текст наезжает на картинки и обрезается. 
+
+Я исправил сетку (CSS). Теперь пластинка и блоки с текстом находятся **строго в левой колонке**, а фотоальбом — **в правой**. Блоки больше не будут перекрывать фотографии, а текст будет переноситься аккуратно.
+
+Вот обновленный код:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -337,6 +344,8 @@
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.6s ease, transform 0.6s ease;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .secret-block.show {
@@ -888,7 +897,7 @@
                     <div class="secret-block">
                       <div class="sb-head">Пометки наблюдателей</div>
                       <div class="sb-body">
-                        <div style="margin-bottom:10px;">
+                        <div style="margin-bottom:10px; word-break: break-word; overflow-wrap: break-word;">
                           <span style="color:#ff6a6a; margin-right:6px;">▸</span>
                           У модуля GEIR.513 наблюдается повышенный интерес к Радиотехнике и строению радиоаппаратуры;
                         </div>
