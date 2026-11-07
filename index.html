@@ -309,6 +309,7 @@
 
   .secret-top { display: grid; grid-template-columns: 320px 1fr; gap: 22px; align-items: start; }
 
+  /* Новый контейнер для блоков под пластинкой */
   .vinyl-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px; border: 1px solid var(--blood); background: rgba(20,0,0,.45); box-shadow: inset 0 0 20px rgba(80,0,0,.5), 0 0 20px rgba(139,0,0,.3); }
   .vinyl { position: relative; width: 260px; height: 260px; border-radius: 50%; cursor: pointer; background: repeating-radial-gradient(circle at 50% 50%, #140000 0 2px, #0a0000 2px 4px, #1c0000 4px 5px); border: 3px solid #2a0000; box-shadow: 0 0 0 2px #000, 0 0 26px rgba(180,0,0,.45), inset 0 0 30px rgba(0,0,0,.9); animation: vinylSpin 2.2s linear infinite; animation-play-state: paused; }
   .vinyl.playing { animation-play-state: running; }
@@ -320,11 +321,37 @@
   .vinyl-hint { font-size: 10px; letter-spacing: 3px; color: #a04040; text-transform: uppercase; text-align: center; }
   .vinyl-hint.playing { color: #ff4d4d; text-shadow: var(--glow); }
 
+  .secret-blocks-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .secret-block { 
+    border: 1px solid var(--blood); 
+    background: rgba(20,0,0,.45); 
+    padding: 14px 16px; 
+    box-shadow: inset 0 0 20px rgba(80,0,0,.5);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .secret-block.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .secret-block .sb-head { font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase; border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px; text-shadow: 0 0 8px rgba(255,60,60,.5); }
+  .secret-block .sb-body { font-size: 13px; line-height: 1.7; color: #5e0000; letter-spacing: 1px; min-height: 40px; }
+
   .album { border: 1px solid var(--blood); background: rgba(20,0,0,.45); padding: 14px; box-shadow: inset 0 0 20px rgba(80,0,0,.5); }
   .album-head { font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase; border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px; text-shadow: 0 0 8px rgba(255,60,60,.5); }
   .album-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .album-photo {
-    position: relative; aspect-ratio: 3 / 4; /* Изменено с 4/3 на 3/4 для вертикальных фото */
+    position: relative; aspect-ratio: 3 / 4;
     border: 1px solid var(--blood);
     background: #0d0000;
     display: flex; align-items: center; justify-content: center;
@@ -334,20 +361,15 @@
   .album-photo::after {
     content: ""; position: absolute; inset: 0;
     background: repeating-linear-gradient(0deg, rgba(180,0,0,.1) 0 1px, transparent 1px 3px);
-    pointer-events: none; z-index: 2; /* Добавлено, чтобы полосы были поверх картинки */
+    pointer-events: none; z-index: 2;
   }
   .album-photo img {
     width: 100%; height: 100%;
-    object-fit: cover; /* Оставляем cover, чтобы фото заполняло рамку без пустых полей */
-    object-position: center top; /* Фокусируемся на верхней части (лицах) */
+    object-fit: cover;
+    object-position: center top;
     filter: sepia(.25) hue-rotate(-8deg) saturate(.85) brightness(.92);
     position: relative; z-index: 1;
   }
-
-  .secret-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
-  .secret-block { border: 1px solid var(--blood); background: rgba(20,0,0,.45); padding: 14px 16px; box-shadow: inset 0 0 20px rgba(80,0,0,.5); }
-  .secret-block .sb-head { font-size: 11px; letter-spacing: 4px; color: #ff6a6a; text-transform: uppercase; border-bottom: 2px solid var(--blood-bright); padding-bottom: 8px; margin-bottom: 12px; text-shadow: 0 0 8px rgba(255,60,60,.5); }
-  .secret-block .sb-body { font-size: 13px; line-height: 1.7; color: #5e0000; letter-spacing: 1px; min-height: 40px; }
 
   @media (max-width: 820px) {
     .boot .boot-log { font-size: 10px; bottom: 16px; }
@@ -364,7 +386,6 @@
     .item-modal-body { grid-template-columns: 1fr; }
     .item-modal-icon { margin: 0 auto; }
     .secret-top { grid-template-columns: 1fr; }
-    .secret-bottom { grid-template-columns: 1fr; }
     .vinyl { width: 200px; height: 200px; }
   }
 </style>
@@ -851,26 +872,28 @@
                   </div>
                   <div class="vinyl-hint" id="vinylHint">НАЖМИТЕ НА ПЛАСТИНКУ · ВОСПРОИЗВЕДЕНИЕ</div>
                   <audio id="vinylAudio" src="Вайбик.mp3" preload="auto" loop></audio>
-                </div>
-
-                                 <div class="album">
-                  <div class="album-head">ФОТОАЛЬБОМ // GEIR.513</div>
-                  <div class="album-grid">
-                    <div class="album-photo"><img src="photo1.png" alt="Фото 01"></div>
-                    <div class="album-photo"><img src="photo2.png" alt="Фото 02"></div>
-                    <div class="album-photo"><img src="photo3.png" alt="Фото 03"></div>
-                    <div class="album-photo"><img src="photo4.png" alt="Фото 04"></div>
+                  
+                  <!-- Блоки перенесены сюда -->
+                  <div class="secret-blocks-vertical" id="secretBlocks">
+                    <div class="secret-block">
+                      <div class="sb-head">Фетиши и наклонности</div>
+                      <div class="sb-body">— ПУСТО —</div>
+                    </div>
+                    <div class="secret-block">
+                      <div class="sb-head">Пометки наблюдателей</div>
+                      <div class="sb-body">— ПУСТО —</div>
+                    </div>
                   </div>
                 </div>
 
-              <div class="secret-bottom">
-                <div class="secret-block">
-                  <div class="sb-head">Фетиши и наклонности</div>
-                  <div class="sb-body">— ПУСТО —</div>
-                </div>
-                <div class="secret-block">
-                  <div class="sb-head">Пометки наблюдателей</div>
-                  <div class="sb-body">— ПУСТО —</div>
+                <div class="album">
+                  <div class="album-head">ФОТОАЛЬБОМ // GEIR.513</div>
+                  <div class="album-grid">
+                    <div class="album-photo"><img src="photo4.png" alt="Фото 01"></div>
+                    <div class="album-photo"><img src="photo2.png" alt="Фото 02"></div>
+                    <div class="album-photo"><img src="photo3.png" alt="Фото 03"></div>
+                    <div class="album-photo"><img src="photo1.png" alt="Фото 04"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -995,6 +1018,16 @@
       if (val === SECRET_PASS) {
         lock.style.display = 'none';
         content.classList.add('unlocked');
+
+        // --- Логика поочередного появления блоков ---
+        var blocks = document.querySelectorAll('.secret-block');
+        blocks.forEach(function(block, index) {
+            setTimeout(function() {
+                block.classList.add('show');
+            }, index * 600);
+        });
+        // ---------------------------------------------
+
       } else {
         err.classList.add('show');
         pass.value = '';
@@ -1176,7 +1209,8 @@
       name: 'GEIR.963',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' },
-        { label: 'Семья', cls: 'rel-family' }
+        { label: 'Семья', cls: 'rel-family' },
+        { label: 'Мертва', cls: 'rel-dead' }
       ],
       text: 'Моя сестрица. Жаль, что мы провели мало времени вместе. От тебя я узнала немного. Но теперь похоже и меня ждет покупка кружевного белья. Но она очень общительная, добрая. Нужно будет поймать ее на смене и пообщаться побольше.\n\n' +
         'Моя старшая сестра просто прелесть! Мне нравится проводить время с ней, общаться о разных мелочах. \n' +
@@ -1186,13 +1220,20 @@
         'Эти циклы были самыми смешными и яркими за все время, что я могу вспомнить! \n' +
         'Ты лучшая старшая сестра из всех, что я могу вспомнить.\n' +
         'А твой подарок я буду носить с удовольствие. Даже в КЗ.\n' +
-        'Ведь Ястреб всегда должен быть при параде.'
+        'Ведь Ястреб всегда должен быть при параде.\n\n' +
+        '————————————————————————\n\n' +
+        'Как же я мало провела времени с тобой. Спасибо, что всему научила. Спасибо, что оставила только теплые воспоминания. Спасибо, что научила меня всему.\n' +
+        'Ты была лучшей старшей сестрой. Как жаль, что теперь тебя нет.\n' +
+        'Хах. Но мы же обыграли этих глупых Ястребов, верно? Обыграли ведь? \n' +
+        'Я не подведу тебя Цеппи. Не подведу. Я стану такой же как и ты. Хорошей старшей сестрой.\n' +
+        'Лучшей, только если меня такой назовут.'
     },
     {
       id: 'habr023',
       name: 'HABR.023',
       statuses: [
-        { label: 'Семья', cls: 'rel-family' }
+        { label: 'Семья', cls: 'rel-family' },
+        { label: 'Мертва', cls: 'rel-dead' }
       ],
       text: 'Большая Пицца. Ой. То есть Птица! \n' +
         'Да... Она точно не Пицца. \n' +
@@ -1200,36 +1241,58 @@
         'Очень любит когда ее гладят.Хоть и не хочет признать этого.\n' +
         'Но когда она ела с подноса торт было смешно.\n' +
         'Мне так уютно рядом с ней и Цеппи. И... Они точно стоят друг дурга.\n' +
-        'Почему-то в их комнате я бываю слишком часто. А Штрасс вроде бы и не против.'
+        'Почему-то в их комнате я бываю слишком часто. А Штрасс вроде бы и не против.\n\n' +
+        '————————————————————————\n\n' +
+        'Глупая большая кошка. Почему вы не вернулись? Это был простой выход за ресурсами.\n' +
+        'И вы обе не вернулись. Ты же кошка! Они должны быть ловкими и быстрыми. \n' +
+        'Кто теперь будет пугать меня пока я работаю? Хватать за щеки пока я бурчу? \n' +
+        'Но я все понимаю... Тут такое случится может с каждым. \n' +
+        'Спасибо, что была рядом. Спасибо, что дала мне шанс доказать. \n' +
+        'И я докажу свои слова. Даже если тебя больше нет.'
     },
     {
       id: 'habr041',
       name: 'HABR.041',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' },
-        { label: 'Непонятность', cls: 'rel-uncertain' }
+        { label: 'Непонятность', cls: 'rel-uncertain' },
+        { label: 'Друг', cls: 'rel-friend' }
       ],
       text: 'Очень милая HABR. Первая встретила меня на комплексе. Обучила меня многому, а так же провела инструктаж по походам в КЗ. Осталось только чтобы мои навыки проверили и оценили. За эти пару циклов узнала, что ей довольно одиноко. В шахте мы немного разговорились о разном. Кажется мне комфортно находиться с ней рядом. А ей со мной. Ну как я могу оценить.\n' +
         'И она помогла мне вернуть макияж после душа. И он выглядит... Намного лучше моего прежнего.\n\n' +
         'Тильда... Такая странная. Она часто проводит время с Сороками. И со мной. \n' +
         'Мне нравятся наши вечера вместе. Нравятся эти моменты, что мы проводим когда на смене уже никого нет.\n' +
         'И мне нравится говорить обо всем. И вроде даже ни о чем.\n' +
-        'Ты странная. Но... Почему-то мне нравится эта странность в тебе.'
+        'Ты странная. Но... Почему-то мне нравится эта странность в тебе.\n\n' +
+        '————————————————————————\n\n' +
+        'Тильда моя опора. Она рядом когда мне плохо, она рядом когда мне хорошо. И всегда поддержит меня.\n' +
+        'Спасибо ей за это.\n' +
+        'Я на самом деле уже не представляю цикла без Тильды.\n' +
+        'Она слишком часто и много времени со мной. Но разве это плохо? \n' +
+        'Конец каждого цикла всегда заканчивается легкими объятиями и разговорами о разных мелочах.\n' +
+        'Я могу позволить себя рядом с ней закрыть глаза и выдохнуть.'
     },
     {
       id: 'gscp221',
       name: 'GSCP.221',
       statuses: [
-        { label: 'Уважение', cls: 'rel-respect' }
+        { label: 'Уважение', cls: 'rel-respect' },
+        { label: 'Друг', cls: 'rel-friend' }
       ],
-      text: 'Ася. Довольно добрая гештальтка, что провела мне экскурсию по складу и мастерской. Хоть она  и думет, что плохой учитель... Но у нее неплохо это получилось. Она очень хорошо общается с 963. Но пока она кажется мне дружелюбной. Нужно будет узнать ее получше.'
+      text: 'Ася. Довольно добрая гештальтка, что провела мне экскурсию по складу и мастерской. Хоть она  и думет, что плохой учитель... Но у нее неплохо это получилось. Она очень хорошо общается с 963. Но пока она кажется мне дружелюбной. Нужно будет узнать ее получше.\n\n' +
+        '————————————————————————\n\n' +
+        'Стала новым интендантом. Вижу, что ей дается это сложно. Но я готова помочь всем чем смогу.\n' +
+        'Насколько я заметила... Ей понравилось танцевать со мной. \n' +
+        'Ася даже улыбнулась. И я понимаю, что эта улыбка была настоящей. Не усталой. А искренней. \n' +
+        'Раз такая мелочь может помочь ей отдохнуть. Я не против иногда танцевать с ней. '
     },
     {
       id: 'arar978',
       name: 'ARAR.978',
       statuses: [
         { label: 'Уважение', cls: 'rel-respect' },
-        { label: 'Нейтральные', cls: 'rel-neutral' }
+        { label: 'Нейтральные', cls: 'rel-neutral' },
+        { label: 'Мертва', cls: 'rel-dead' }
       ],
       text: 'Временная глава ИО, как я понимаю. Но очень собранная и сосредоточенная. Выполняет свои обязанности как следует. Не знаю только за что она поблагодарила меня после ТО генератора. Хоть я и не понимаю за что.'
     },
@@ -1237,7 +1300,8 @@
       id: 'lstr217',
       name: 'LSTR.217',
       statuses: [
-        { label: 'Уважение', cls: 'rel-respect' }
+        { label: 'Уважение', cls: 'rel-respect' },
+        { label: 'Мертва', cls: 'rel-dead' }
       ],
       text: 'Очень милая Сорока по сравнению с другими сороками. \n' +
         'Жаль мы мало говорим так как в последние циклы много работы.\n' +
@@ -1266,6 +1330,47 @@
         'Хотя я просто делаю работу.\n' +
         'Я так часто вижу ее за работой, что мне даже страшно на ее здоровье. Но Ари вроде бы медик... Не думаю, что она загоняет себя до усталости.\n' +
         'Хотя работает она очень много.'
+    },
+    {
+      id: 'star731',
+      name: 'STAR.731',
+      statuses: [
+        { label: 'Друг', cls: 'rel-friend' },
+        { label: 'Непонятность', cls: 'rel-uncertain' }
+      ],
+      text: 'Вредная Штарка. Но почему-то с ней мне приятно общаться. Это странно.\n' +
+        'Мы видимся почти каждый цикл и хоть немного, но общаемся.\n' +
+        'Иногда у нее проскакивают очень странные фразы. С разными смыслами или которые она услышала от 102.\n' +
+        'И почему мне так смешно когда Штарка говорит "дуреешь"? \n' +
+        'И хреновая из нее группа поддержки. Трясла меня как котенка.\n' +
+        'Но она пришла... Пришла хоть я никого и не просила. Она была рядом. \n' +
+        'Нет. Я все себе надумываю. Это ее работа. Ведь правда? \n' +
+        'Но она так часто хвалит меня. Я ничего не понимаю.\n' +
+        'Да я все себе надумываю. \n' +
+        '————————————————————————\n\n' +
+        'Я уже считаю ее подругой. Ведь могу обсудить с ней все! И Штрассер и Пиццу, и разные смешные моменты для меня.\n' +
+        'Ей конечно не смешно, но она и не говорит, что это глупости. Ну... Не всегда говорит, что это глупости.\n' +
+        'Почему-то рядом с ней я слишком часто улыбаюсь. Аж щеки болят. Жаль у нас так много работы и мы не можем так часто говорить как мне хотелось бы.\n' +
+        'Но... Да нет. Я же знаю, что все надумываю.'
+    },
+    {
+      id: 'eulr567',
+      name: 'EULR.567',
+      statuses: [
+        { label: 'Друг', cls: 'rel-friend' }
+      ],
+      text: 'Такая активная Сова. Мне нравится слушать ее истории о ситуациях на комплексе. Всегда когда я видела ее Лили была такой активной.\n' +
+        'Я часто вижу ее в компании Арар. Но иногда она все же бывает одна. И даже становится грустно.\n' +
+        'Лиляшка, как же это смешно звучит, очень тактильная. Ну, а как я могу быть против объятий? \n' +
+        'Тем более когда она смотрит мне в глаза.\n' +
+        '————————————————————————\n\n' +
+        'Она впервые заплакала... При мне. \n' +
+        'Вспомнила что-то настолько болезненное. Я решила не лезть дальше.\n' +
+        'И еще больше решилась защищать своих друзей. Она ведь мой друг... Ну я считаю ее другом. \n' +
+        'Надеюсь и я для нее друг.\n' +
+        'Так много рассказала про моих сестер, что были тут до меня. \n' +
+        'И то ли я не поняла, то ли она сказала, что круче меня только горы. \n' +
+        'Хах... Да кто же знает.'
     }
   ];
 
