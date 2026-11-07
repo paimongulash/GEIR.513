@@ -1,3 +1,6 @@
+Готово. Я обновил блок «Секретно», добавив стилизованные зацензуренные строки (эффект `redacted`) и пометку «Будут открываться по мере обнаружения». Также я добавил красивый маркер списка для пункта наблюдателя. Код полностью готов к запуску.
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -877,11 +880,26 @@
                   <div class="secret-blocks-vertical" id="secretBlocks">
                     <div class="secret-block">
                       <div class="sb-head">Фетиши и наклонности</div>
-                      <div class="sb-body">— ПУСТО —</div>
+                      <div class="sb-body">
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span style="display:block; margin-top:10px; font-style:italic; color:#a04040; font-size:11px; letter-spacing:1px;">[ ДАННЫЕ БУДУТ ОТКРЫВАТЬСЯ ПО МЕРЕ ОБНАРУЖЕНИЯ ]</span>
+                      </div>
                     </div>
                     <div class="secret-block">
                       <div class="sb-head">Пометки наблюдателей</div>
-                      <div class="sb-body">— ПУСТО —</div>
+                      <div class="sb-body">
+                        <div style="margin-bottom:10px;">
+                          <span style="color:#ff6a6a; margin-right:6px;">▸</span>
+                          У модуля GEIR.513 наблюдается повышенный интерес к Радиотехнике и строению радиоаппаратуры;
+                        </div>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span class="redacted">████████████████████████████████████████</span><br>
+                        <span style="display:block; margin-top:10px; font-style:italic; color:#a04040; font-size:11px; letter-spacing:1px;">[ ДАННЫЕ БУДУТ ОТКРЫВАТЬСЯ ПО МЕРЕ ОБНАРУЖЕНИЯ ]</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1490,3 +1508,4 @@
 </script>
 </body>
 </html>
+```
